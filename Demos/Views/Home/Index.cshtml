@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>YouZack.FromJsonBody Demos</title>
+</head>
+<body>
+    <input type="button" onclick="btnClick()" value="click"/>
+    <script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
+    <script type="text/javascript">
+        function btnClick()
+        {
+            axios.post('@Url.Action("Test","Home")',
+                { phoneNumber: "119110", age: 3, salary: 333.3, gender: true,dir:"west" })
+            .then(function (response)
+            {
+                alert(response.data);
+            })
+            .catch(function (error)
+            {
+                alert('Send failed');
+            });
+        }
+    </script>
+</body>
+</html>

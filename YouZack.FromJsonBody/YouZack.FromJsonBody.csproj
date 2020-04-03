@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>YouZack</Authors>
+    <Company>YouZack</Company>
+    <Description># YouZack.FromJsonBody
+Bind simple parameter of Action with HttpBody of Json format.
+For ASP.Net Core MVC and ASP.Net Core WebAPI
+
+···
+public async Task&lt;IActionResult&gt; Test([FromJsonBody]string phoneNumber, [FromJsonBody]string test1, 
+[FromJsonBody]int? age, [FromJsonBody] bool gender, [FromJsonBody] double salary);
+···
+
+Http Body:
+{"phoneNumber":"110112119","age":18,"gender":true}
+
+and ContentType of request should be application/json
+
+Add following code to Startup before app.UseEndpoints():
+···
+app.UseFromJsonBody();//using YouZack.FromJsonBody;
+···
+
+Done!
+
+To KEEP IT SIMPLE, YouZack.FromJsonBody only supports simple parameter types,like int,long,double,bool,Enum,string ,but does not support complex types,like Array,List,POCO etc.
+If you want to use complex types, please go backwards to '[FromBody]' and ModelBinder.</Description>
+    <Version>1.0.2</Version>
+    <PackageProjectUrl>https://github.com/yangzhongke/YouZack.FromJsonBody</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/yangzhongke/YouZack.FromJsonBody</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="System.Text.Json" Version="4.7.1" />
+  </ItemGroup>
+
+</Project>

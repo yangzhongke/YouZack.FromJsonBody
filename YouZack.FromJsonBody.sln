@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29905.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouZack.FromJsonBody", "YouZack.FromJsonBody\YouZack.FromJsonBody.csproj", "{28B809E9-2844-4AC8-8BF1-4540DF196E4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demos", "Demos\Demos.csproj", "{2CDFC0EB-015A-4C96-B0BF-12908D3F3ABF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{28B809E9-2844-4AC8-8BF1-4540DF196E4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28B809E9-2844-4AC8-8BF1-4540DF196E4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28B809E9-2844-4AC8-8BF1-4540DF196E4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28B809E9-2844-4AC8-8BF1-4540DF196E4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CDFC0EB-015A-4C96-B0BF-12908D3F3ABF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CDFC0EB-015A-4C96-B0BF-12908D3F3ABF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CDFC0EB-015A-4C96-B0BF-12908D3F3ABF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CDFC0EB-015A-4C96-B0BF-12908D3F3ABF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {80DE66C2-37BC-490D-ADC0-2AFA13351DA2}
+	EndGlobalSection
+EndGlobal
