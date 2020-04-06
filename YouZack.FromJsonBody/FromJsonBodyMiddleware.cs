@@ -24,7 +24,15 @@ namespace YouZack.FromJsonBody
                 await _next(context);
                 return;
             }
-            Encoding encoding = Encoding.GetEncoding(charSet);
+            Encoding encoding;
+            if(string.IsNullOrWhiteSpace(charSet))
+            {
+                encoding = Encoding.UTF8;
+            }
+            else
+            {
+                encoding = Encoding.GetEncoding(charSet);
+            }            
             context.Request.EnableBuffering();//Ensure the HttpRequest.Body can be read multipletimes
             int contentLen = 255;
             if (context.Request.ContentLength != null)
@@ -32,7 +40,7 @@ namespace YouZack.FromJsonBody
                 contentLen = (int)context.Request.ContentLength;
             }
             Stream body = context.Request.Body;
-            using (StreamReader reader = new StreamReader(body, encoding, false, contentLen, false))
+            using (StreamReader reader = new StreamReader(body, encoding, true, contentLen, false))
             {
                 //parse json into JsonElement in advance,
                 //to reduce multiple times of parseing in FromJsonBodyBinder.BindModelAsync
