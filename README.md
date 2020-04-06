@@ -8,6 +8,8 @@ Install-Package YouZack.FromJsonBody
 ```
 public async Task<IActionResult> Test([FromJsonBody]string phoneNumber, [FromJsonBody]string test1, 
 [FromJsonBody]int? age, [FromJsonBody] bool gender, [FromJsonBody] double salary);
+
+public async Task<int> Post([FromJsonBody] int i1, [FromJsonBody] int i2);
 ```
 
 Http Body:
