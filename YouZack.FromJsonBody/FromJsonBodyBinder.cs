@@ -25,10 +25,10 @@ namespace YouZack.FromJsonBody
             //(bindingContext.FieldName:parameter name
             if (jsonObj.TryGetProperty(bindingContext.FieldName, out JsonElement jsonProperty))
             {
-                object jsonValue = GetValue(jsonProperty);
+                object jsonValue = jsonProperty.GetValue();
                 //conver to the type of jsonValue to  type of parameter
                 //bindingContext.ModelType:parameter type
-                object targetValue = ChangeType(jsonValue, bindingContext.ModelType);
+                object targetValue = jsonValue.ChangeType(bindingContext.ModelType);
                 bindingContext.Result = ModelBindingResult.Success(targetValue);
             }
             else//if property not found
@@ -38,54 +38,6 @@ namespace YouZack.FromJsonBody
             return Task.CompletedTask;
         }
 
-        /// <summary>
-        /// Get value of JsonElement
-        /// </summary>
-        /// <param name="property"></param>
-        /// <returns></returns>
-
-        static object GetValue(JsonElement property)
-        {
-            switch (property.ValueKind)
-            {
-                case JsonValueKind.Array:
-                    throw new NotSupportedException("Array is not supported, use [FromBody] and Model instead");
-                case JsonValueKind.False:
-                    return false;
-                case JsonValueKind.Null:
-                    return null;
-                case JsonValueKind.Number:
-                    return property.GetDecimal();
-                case JsonValueKind.Object:
-                    throw new NotSupportedException("Object is not supported, use [FromBody] and Model instead");
-                case JsonValueKind.String:
-                    return property.GetString();
-                case JsonValueKind.True:
-                    return true;
-                case JsonValueKind.Undefined:
-                    return null;
-                default:
-                    throw new ArgumentException("Unkown property.ValueKind");
-            }
-        }
-
-        //https://stackoverflow.com/questions/18015425/invalid-cast-from-system-int32-to-system-nullable1system-int32-mscorlib
-        private static object ChangeType(object value, Type conversion)
-        {
-            var t = conversion;
-            if (t.IsGenericType && t.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
-            {
-                if (value == null)
-                {
-                    return null;
-                }
-                t = Nullable.GetUnderlyingType(t);
-            }
-            if(t.IsEnum)
-            {
-                return Enum.Parse(t, Convert.ToString(value),true);
-            }
-            return Convert.ChangeType(value, t);
-        }
+        
     }
 }
