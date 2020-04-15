@@ -19,7 +19,10 @@ namespace YouZack.FromJsonBody
 
         public async Task Invoke(HttpContext context)
         {
-            if(!Helper.ContentTypeIsJson(context, out string charSet))
+            //for request that has large body, EnableBuffering will reduce performance,
+            //and generally the body of "application/json" is not too large,
+            //so only EnableBuffering on contenttype="application/json"
+            if (!Helper.ContentTypeIsJson(context, out string charSet))
             {
                 await _next(context);
                 return;
@@ -32,7 +35,8 @@ namespace YouZack.FromJsonBody
             else
             {
                 encoding = Encoding.GetEncoding(charSet);
-            }            
+            }     
+
             context.Request.EnableBuffering();//Ensure the HttpRequest.Body can be read multipletimes
             int contentLen = 255;
             if (context.Request.ContentLength != null)
@@ -40,7 +44,7 @@ namespace YouZack.FromJsonBody
                 contentLen = (int)context.Request.ContentLength;
             }
             Stream body = context.Request.Body;
-            using (StreamReader reader = new StreamReader(body, encoding, true, contentLen, false))
+            using (StreamReader reader = new StreamReader(body, encoding, true, contentLen, true))
             {
                 //parse json into JsonElement in advance,
                 //to reduce multiple times of parseing in FromJsonBodyBinder.BindModelAsync
