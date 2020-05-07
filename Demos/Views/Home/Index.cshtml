@@ -7,13 +7,27 @@
 </head>
 <body>
     <input type="button" onclick="btnClick()" value="MVC click" />
+    <input type="button" onclick="btnInvalidInputClick()" value="MVC click(Invalid data)" />
     <input type="button" onclick="btnAPIClick()" value="API click" />
     <script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
     <script type="text/javascript">
         function btnClick()
         {
             axios.post('@Url.Action("Test","Home")',
-                { phoneNumber: "119110", age: 3, salary: 333.3, gender: true,dir:"west" })
+                { phoneNumber: "119110", age: 3, salary: 333.3, gender: true,dir:"west",name:"zack yang" })
+            .then(function (response)
+            {
+                alert(response.data);
+            })
+            .catch(function (error)
+            {
+                alert('Send failed');
+            });
+        }
+
+        function btnInvalidInputClick() {
+            axios.post('@Url.Action("Test","Home")',
+                { phoneNumber: "119110", age: 190, salary: 333.3, gender: true,dir:"west"})
             .then(function (response)
             {
                 alert(response.data);
