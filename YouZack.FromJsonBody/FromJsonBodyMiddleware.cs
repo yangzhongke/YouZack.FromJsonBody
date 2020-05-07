@@ -53,7 +53,7 @@ namespace YouZack.FromJsonBody
                 {
                     body.Position = 0;
                     var root = document.RootElement;
-                    context.Items.Add(RequestJsonObject_Key, root);
+                    context.Items[RequestJsonObject_Key]= root;
                     await _next(context);
                 }
             }
