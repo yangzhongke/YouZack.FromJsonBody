@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
 using System.Text;
 using System.Text.Json;
@@ -11,10 +13,13 @@ namespace YouZack.FromJsonBody
         public const string RequestJsonObject_Key = "RequestJsonObject";
 
         private readonly RequestDelegate _next;
+        private ILogger<FromJsonBodyMiddleware> logger;
 
-        public FromJsonBodyMiddleware(RequestDelegate next)
+        public FromJsonBodyMiddleware(RequestDelegate next,
+            ILogger<FromJsonBodyMiddleware> logger)
         {
             _next = next;
+            this.logger = logger;
         }
 
         public async Task Invoke(HttpContext context)
@@ -22,7 +27,9 @@ namespace YouZack.FromJsonBody
             //for request that has large body, EnableBuffering will reduce performance,
             //and generally the body of "application/json" is not too large,
             //so only EnableBuffering on contenttype="application/json"
-            if (!Helper.ContentTypeIsJson(context, out string charSet))
+            string method = context.Request.Method;
+            if (!Helper.ContentTypeIsJson(context, out string charSet)
+                ||"GET".Equals(method, StringComparison.OrdinalIgnoreCase))
             {
                 await _next(context);
                 return;
@@ -44,18 +51,42 @@ namespace YouZack.FromJsonBody
                 contentLen = (int)context.Request.ContentLength;
             }
             Stream body = context.Request.Body;
+            string bodyText;
             using (StreamReader reader = new StreamReader(body, encoding, true, contentLen, true))
             {
                 //parse json into JsonElement in advance,
                 //to reduce multiple times of parseing in FromJsonBodyBinder.BindModelAsync
-                string json = await reader.ReadToEndAsync();
-                using (JsonDocument document = JsonDocument.Parse(json))
+                bodyText = await reader.ReadToEndAsync();                
+            }
+            //no request body
+            if(string.IsNullOrWhiteSpace(bodyText))
+            {
+                await _next(context);
+                return;
+            }
+            //not invalid json
+            if(!(bodyText.StartsWith("{")&& bodyText.EndsWith("}")))
+            {
+                await _next(context);
+                return;
+            }
+            
+            try
+            {
+                using (JsonDocument document = JsonDocument.Parse(bodyText))
                 {
                     body.Position = 0;
-                    var root = document.RootElement;
-                    context.Items[RequestJsonObject_Key]= root;
+                    JsonElement jsonRoot = document.RootElement;
+                    context.Items[RequestJsonObject_Key] = jsonRoot;
                     await _next(context);
                 }
+            }
+            catch(JsonException ex)
+            {
+                logger.LogError(ex,"json解析失败:"+bodyText);
+                //invalid json format
+                await _next(context);
+                return;
             }
         }
     }

@@ -9,6 +9,7 @@
     <input type="button" onclick="btnClick()" value="MVC click" />
     <input type="button" onclick="btnInvalidInputClick()" value="MVC click(Invalid data)" />
     <input type="button" onclick="btnAPIClick()" value="API click" />
+    <input type="button" onclick="btnEmptyGetClick()" value="EmptyGet" />
     <script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
     <script type="text/javascript">
         function btnClick()
@@ -50,6 +51,13 @@
             {
                 alert('Send failed');
             });
+        }
+        function btnEmptyGetClick()
+        {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/api/API");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send();
         }
     </script>
 </body>

@@ -15,6 +15,7 @@ namespace Demos.Controllers
         }
 
         [HttpPost]
+        [HttpGet]
         public IActionResult Test([FromJsonBody]string phoneNumber, [FromJsonBody]string test1, 
             [FromJsonBody][Range(0,100,ErrorMessage ="Age must be between 0 and 100")]int? age, 
             [FromJsonBody] bool gender, 
