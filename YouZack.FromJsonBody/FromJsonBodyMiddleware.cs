@@ -52,11 +52,18 @@ namespace YouZack.FromJsonBody
             }
             Stream body = context.Request.Body;
             string bodyText;
-            using (StreamReader reader = new StreamReader(body, encoding, true, contentLen, true))
+            if(contentLen<=0)
             {
-                //parse json into JsonElement in advance,
-                //to reduce multiple times of parseing in FromJsonBodyBinder.BindModelAsync
-                bodyText = await reader.ReadToEndAsync();                
+                bodyText = "";
+            }
+            else
+            {
+                using (StreamReader reader = new StreamReader(body, encoding, true, contentLen, true))
+                {
+                    //parse json into JsonElement in advance,
+                    //to reduce multiple times of parseing in FromJsonBodyBinder.BindModelAsync
+                    bodyText = await reader.ReadToEndAsync();
+                }
             }
             //no request body
             if(string.IsNullOrWhiteSpace(bodyText))
