@@ -15,7 +15,7 @@ namespace Demos.Controllers
 
         [HttpPost]
         [HttpGet]
-        public async Task<int> Post([FromJsonBody] int i1, [FromJsonBody] int i2)
+        public async Task<int> Post([FromJsonBody("i2")] int i1, [FromJsonBody] int i2)
         {
             return i1 + i2;
         }

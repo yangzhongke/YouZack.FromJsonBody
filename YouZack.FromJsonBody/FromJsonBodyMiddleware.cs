@@ -90,7 +90,7 @@ namespace YouZack.FromJsonBody
             }
             catch(JsonException ex)
             {
-                logger.LogError(ex,"json解析失败:"+bodyText);
+                logger.LogError(ex,"Parsing json failed:"+bodyText);
                 //invalid json format
                 await _next(context);
                 return;
