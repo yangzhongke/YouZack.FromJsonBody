@@ -57,9 +57,12 @@ namespace YouZack.FromJsonBody
         private static bool ParseJsonValue(JsonElement jsonObj, string fieldName, out object jsonValue)
         {
             int firstDotIndex = fieldName.IndexOf('.');
-            if(firstDotIndex>=0)
+            //if [FromJsonBody("author.father.name")]
+            if (firstDotIndex>=0)
             {
+                //"author"
                 string firstPropName = fieldName.Substring(0, firstDotIndex);
+                //"father.name"
                 string leftPart = fieldName.Substring(firstDotIndex + 1);
                 if(jsonObj.TryGetProperty(firstPropName, out JsonElement firstElement))
                 {
