@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -15,9 +16,12 @@ namespace Demos.Controllers
 
         [HttpPost]
         [HttpGet]
-        public async Task<int> Post([FromJsonBody("i2")] int i1, [FromJsonBody] int i2)
+        public async Task<int> Post([FromJsonBody("i1")] int i3, [FromJsonBody] int i2,
+            [FromJsonBody("author.age")]int aAge,[FromJsonBody("author.father.name")] string dadName)
         {
-            return i1 + i2;
+            Debug.WriteLine(aAge);
+            Debug.WriteLine(dadName);
+            return i3 + i2+aAge;
         }
     }
 }

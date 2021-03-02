@@ -28,7 +28,7 @@ Done!
 
 To KEEP IT SIMPLE, YouZack.FromJsonBody only supports simple parameter types,like int,long,double,bool,Enum,string ,but does not support complex types,like Array,List,POCO etc.
 If you want to use complex types, please go backwards to '[FromBody]' and ModelBinder.</Description>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <PackageProjectUrl>https://github.com/yangzhongke/YouZack.FromJsonBody</PackageProjectUrl>
     <RepositoryUrl>https://github.com/yangzhongke/YouZack.FromJsonBody</RepositoryUrl>
   </PropertyGroup>

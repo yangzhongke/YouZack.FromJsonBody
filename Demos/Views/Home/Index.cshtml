@@ -42,7 +42,7 @@
         function btnAPIClick()
         {
             axios.post('/api/API',
-                { i1:1,i2:5 })
+                { i1: 1, i2: 5, author: { name: 'yzk', age: 18, father: {name:'laoyang',age:28}} })
             .then(function (response)
             {
                 alert(response.data);

@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.Controllers;
+﻿using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace YouZack.FromJsonBody
 {
@@ -37,11 +36,12 @@ namespace YouZack.FromJsonBody
             {
                 fieldName = fromJsonBodyAttr.PropertyName;
             }
+
+            object jsonValue;
             //if property found
             //(bindingContext.FieldName:parameter name
-            if (jsonObj.TryGetProperty(fieldName, out JsonElement jsonProperty))
+            if (ParseJsonValue(jsonObj, fieldName, out jsonValue))
             {
-                object jsonValue = jsonProperty.GetValue();
                 //conver to the type of jsonValue to  type of parameter
                 //bindingContext.ModelType:parameter type
                 object targetValue = jsonValue.ChangeType(bindingContext.ModelType);
@@ -54,11 +54,43 @@ namespace YouZack.FromJsonBody
             return Task.CompletedTask;
         }
 
+        private static bool ParseJsonValue(JsonElement jsonObj, string fieldName, out object jsonValue)
+        {
+            int firstDotIndex = fieldName.IndexOf('.');
+            if(firstDotIndex>=0)
+            {
+                string firstPropName = fieldName.Substring(0, firstDotIndex);
+                string leftPart = fieldName.Substring(firstDotIndex + 1);
+                if(jsonObj.TryGetProperty(firstPropName, out JsonElement firstElement))
+                {
+                    return ParseJsonValue(firstElement, leftPart, out jsonValue);
+                }
+                else
+                {
+                    jsonValue = null;
+                    return false;
+                }
+            }
+            else
+            {
+                bool b = jsonObj.TryGetProperty(fieldName, out JsonElement jsonProperty);
+                if (b)
+                {
+                    jsonValue = jsonProperty.GetValue();
+                }
+                else
+                {
+                    jsonValue = null;
+                }
+                return b;
+            }            
+        }
+
         private static FromJsonBodyAttribute GetFromJsonBodyAttr(ModelBindingContext bindingContext, string fieldName)
         {
             var actionDesc = bindingContext.ActionContext.ActionDescriptor;
             string actionId = actionDesc.Id;
-            string cacheKey = $"FromJsonBodyAttribute:actionId:{actionId}:{fieldName}";
+            string cacheKey = $"{actionId}:{fieldName}";
 
             //fetch from cache to improve performance
             FromJsonBodyAttribute fromJsonBodyAttr;
