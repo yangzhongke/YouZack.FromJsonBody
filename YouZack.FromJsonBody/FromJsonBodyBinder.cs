@@ -39,7 +39,7 @@ namespace YouZack.FromJsonBody
 
             object jsonValue;
             //if property found
-            //(bindingContext.FieldName:parameter name
+            //bindingContext.FieldName is the name of binded parameter
             if (ParseJsonValue(jsonObj, fieldName, out jsonValue))
             {
                 //conver to the type of jsonValue to  type of parameter
@@ -54,6 +54,13 @@ namespace YouZack.FromJsonBody
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="jsonObj"></param>
+        /// <param name="fieldName">can be: "name" or "owner.name" or "owner.owner.age"</param>
+        /// <param name="jsonValue"></param>
+        /// <returns></returns>
         private static bool ParseJsonValue(JsonElement jsonObj, string fieldName, out object jsonValue)
         {
             int firstDotIndex = fieldName.IndexOf('.');
@@ -106,6 +113,5 @@ namespace YouZack.FromJsonBody
             }            
             return fromJsonBodyAttr;
         }
-
     }
 }
